@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Christmas 1914: a lesson for Marielle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E6EBEC; --paper:#F8F9F7; --ink:#1D2427; --muted:#56626A; --line:#C3CCCF;
+  --khaki:#5B5D31; --khaki-soft:#E3E3D2; --gold:#A8741A; --gold-bright:#E2B252; --gold-soft:#F3E7C9;
+  --right:#2E6B45; --right-soft:#DDEBDF; --wrong:#9A3B2B; --wrong-soft:#F3DEDA;
+  --focus:#2F6F8F; --field:#DCE2E2; --hud:#1D2427; --hud-ink:#E8ECEA;
+  --stencil:'Stardos Stencil', Impact, 'Arial Narrow', sans-serif;
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11171A; --paper:#1A2125; --ink:#E4E8E6; --muted:#9BA7AD; --line:#34414A;
+    --khaki:#BDBD8E; --khaki-soft:#2A2D22; --gold:#E2B252; --gold-bright:#E2B252; --gold-soft:#3A311F;
+    --right:#7FC596; --right-soft:#1F3326; --wrong:#E99A89; --wrong-soft:#3A2420;
+    --focus:#7FB8D4; --field:#222B30; --hud:#0B1013; --hud-ink:#E4E8E6;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11171A; --paper:#1A2125; --ink:#E4E8E6; --muted:#9BA7AD; --line:#34414A;
+  --khaki:#BDBD8E; --khaki-soft:#2A2D22; --gold:#E2B252; --gold-bright:#E2B252; --gold-soft:#3A311F;
+  --right:#7FC596; --right-soft:#1F3326; --wrong:#E99A89; --wrong-soft:#3A2420;
+  --focus:#7FB8D4; --field:#222B30; --hud:#0B1013; --hud-ink:#E4E8E6;
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 96px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:1.0625rem;line-height:1.55}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* HUD */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--hud);color:var(--hud-ink)}
+.hud-in{max-width:1320px;margin:0 auto;padding:.7rem 1.4rem;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:1.1rem}
+.brand{font-family:var(--stencil);font-size:1.35rem;letter-spacing:.02em;white-space:nowrap}
+.brand span{color:var(--gold-bright)}
+.route{display:flex;gap:.25rem;overflow-x:auto}
+.route button{display:flex;align-items:center;gap:.45rem;border:1px solid transparent;background:transparent;color:#AEB9BE;border-radius:999px;padding:.3rem .65rem .3rem .3rem;cursor:pointer;white-space:nowrap;font-size:.9rem}
+.route button .n{display:inline-grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;border:1px solid #56636A;font-family:var(--stencil);font-size:.95rem}
+.route button .lbl{display:none}
+.route button[aria-current="step"] .lbl{display:inline}
+.route button[aria-current="step"]{color:var(--hud-ink);border-color:#56636A}
+.route button[aria-current="step"] .n{background:var(--hud-ink);color:var(--hud);border-color:var(--hud-ink)}
+.route button.done .n{background:var(--gold-bright);border-color:var(--gold-bright);color:#1D2427}
+.timer{display:flex;align-items:center;gap:.5rem}
+.clock{font-family:var(--stencil);font-size:1.6rem;min-width:4.4ch;text-align:right;font-variant-numeric:tabular-nums}
+.clock.done{color:var(--gold-bright)}
+.hbtn{border:1px solid #56636A;background:transparent;color:var(--hud-ink);border-radius:6px;padding:.28rem .7rem;cursor:pointer;font-size:.9rem}
+.hbtn.solid{background:var(--hud-ink);color:var(--hud);border-color:var(--hud-ink)}
+.xp{min-width:14rem}
+.xp-top{display:flex;justify-content:space-between;align-items:baseline;gap:.8rem}
+.xp-num{font-family:var(--stencil);font-size:1.35rem;color:var(--gold-bright)}
+.rank{font-size:.88rem;color:#C8D0D3}
+.bar{height:6px;background:#39454C;border-radius:3px;margin-top:.3rem;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold-bright);transition:width .5s ease}
+
+/* Layout */
+main{max-width:1320px;margin:0 auto;padding:2rem 1.4rem 5rem}
+.stage{display:none}
+.stage.active{display:block}
+.stage-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:1.6rem;border-bottom:2px solid var(--ink);padding-bottom:1rem}
+.stage-head h1{font-family:var(--stencil);font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;margin:0}
+.stage-head p{margin:.5rem 0 0;color:var(--muted);max-width:44rem}
+.badge-slot{display:flex;align-items:center;gap:.7rem;color:var(--muted);font-size:.95rem;text-align:right}
+.medal{width:3.2rem;height:3.2rem;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;font-family:var(--stencil);font-size:1.3rem;border:2px dashed var(--line);color:var(--line)}
+.badge-slot.earned{color:var(--ink)}
+.badge-slot.earned .medal{border:3px solid var(--gold);background:var(--gold-soft);color:var(--gold)}
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:2rem;align-items:start}
+.sticky{position:sticky;top:calc(env(safe-area-inset-top,0px) + 92px);max-height:calc(100vh - 110px);overflow:auto}
+@media (max-width:1000px){.split{grid-template-columns:1fr}.sticky{position:static;max-height:none}.hud-in{grid-template-columns:1fr auto;}.route{grid-column:1/-1;order:3}.xp{min-width:0}}
+
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:1.3rem 1.4rem;margin-bottom:1.4rem}
+.panel h2{font-size:1.25rem;margin:0 0 .3rem;line-height:1.3}
+.panel .meta{display:flex;justify-content:space-between;gap:1rem;align-items:baseline}
+.pts{font-family:var(--stencil);color:var(--gold);white-space:nowrap;font-size:1rem}
+.panel.complete{border-color:var(--gold)}
+.panel.complete .pts::after{content:" earned";font-family:var(--serif);font-size:.85rem}
+.hint{color:var(--muted);font-size:.95rem;margin:.2rem 0 .8rem}
+textarea{width:100%;min-height:8rem;font:inherit;font-size:1.02rem;line-height:1.55;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.7rem .8rem;resize:vertical}
+textarea.tall{min-height:13rem}
+.wc{display:flex;justify-content:space-between;font-size:.88rem;color:var(--muted);margin-top:.3rem}
+.wc .goal.met{color:var(--right)}
+.btn{border:1px solid var(--ink);background:transparent;border-radius:6px;padding:.4rem .9rem;cursor:pointer}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-top:.8rem}
+
+/* Sources */
+.tabs{display:flex;gap:.4rem;margin-bottom:.8rem}
+.tabs button{font-family:var(--stencil);font-size:1.4rem;width:3rem;height:3rem;border:1px solid var(--line);background:var(--paper);border-radius:8px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--khaki);color:var(--paper);border-color:var(--khaki)}
+.source{background:var(--paper);border:1px solid var(--line);border-left:6px solid var(--khaki);border-radius:6px;padding:1.2rem 1.3rem}
+.source .prov{font-style:italic;color:var(--muted);font-size:.95rem;margin:0 0 .8rem}
+.source .txt{margin:0}
+.source.mono .txt{font-family:'Courier New',Courier,monospace;font-size:.97rem}
+.context{background:var(--field);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem;font-size:.98rem}
+.context p{margin:.3rem 0}
+
+/* Sorter */
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;min-height:3.2rem;padding:.6rem;border:1px dashed var(--line);border-radius:8px;margin-bottom:.9rem}
+.pool:empty::before{content:"All cards placed";color:var(--muted);font-size:.9rem;padding:.4rem}
+.bins{display:grid;gap:.7rem}
+.bin{border:2px dashed var(--line);border-radius:10px;padding:.6rem;min-height:7rem;display:flex;flex-direction:column;gap:.45rem;transition:border-color .15s,background .15s}
+.bin h3{margin:0 0 .2rem;font-size:1rem;font-family:var(--stencil);letter-spacing:.02em;color:var(--khaki)}
+.bin.over,.pool.over{border-color:var(--gold);background:var(--gold-soft)}
+.bin.target{border-color:var(--gold)}
+.chip{display:block;text-align:left;font-size:.93rem;line-height:1.3;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:.5rem .65rem;cursor:grab;box-shadow:0 1px 0 var(--line);user-select:none}
+.pool .chip{display:inline-block;max-width:22rem}
+.chip.sel{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold);background:var(--gold-soft)}
+.chip.dragging{opacity:.4}
+.chip.ok{border-color:var(--right);background:var(--right-soft)}
+.chip.no{border-color:var(--wrong);background:var(--wrong-soft)}
+.chip .fb{display:block;font-size:.84rem;margin-top:.3rem;color:var(--wrong)}
+.chip.ok .fb{color:var(--right)}
+.result{margin-top:.8rem;font-size:.95rem}
+.result strong{font-family:var(--stencil);font-size:1.15rem;color:var(--gold)}
+
+/* Diamond */
+.diamond-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:1.4rem;align-items:start}
+.dcol{display:flex;flex-direction:column;gap:.5rem}
+.dpool{display:flex;flex-direction:column;gap:.45rem;min-height:4rem;padding:.6rem;border:1px dashed var(--line);border-radius:8px}
+.dpool:empty::before{content:"All causes placed";color:var(--muted);font-size:.9rem}
+.diamond{display:flex;flex-direction:column;gap:.5rem;align-items:center}
+.drow{display:flex;gap:.5rem;justify-content:center;width:100%}
+.slot{flex:0 1 11.5rem;min-height:5rem;border:2px dashed var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:.35rem;font-size:.86rem;line-height:1.25;text-align:center;color:var(--muted);background:transparent;cursor:pointer}
+.slot.filled{border-style:solid;border-color:var(--khaki);color:var(--ink);background:var(--paper);cursor:grab}
+.drow:first-child .slot{border-color:var(--gold)}
+.drow:first-child .slot.filled{background:var(--gold-soft)}
+.slot.over{border-color:var(--gold);background:var(--gold-soft)}
+.dlabel{font-size:.85rem;color:var(--muted);text-align:center}
+
+/* Checks */
+.checks{list-style:none;padding:0;margin:.6rem 0 0;display:grid;gap:.35rem}
+.checks li{display:flex;gap:.55rem;align-items:flex-start;font-size:.95rem;color:var(--muted)}
+.checks li::before{content:"";flex:0 0 1.1rem;height:1.1rem;margin-top:.2rem;border:2px solid var(--line);border-radius:50%}
+.checks li.met{color:var(--ink)}
+.checks li.met::before{background:var(--right);border-color:var(--right)}
+.ticks{display:grid;gap:.4rem;margin-top:.6rem}
+.tick{display:flex;gap:.6rem;align-items:flex-start;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:.45rem .65rem;cursor:pointer;font-size:.95rem}
+.tick .box{flex:0 0 1.15rem;height:1.15rem;margin-top:.18rem;border:2px solid var(--muted);border-radius:4px}
+.tick[aria-pressed="true"]{border-color:var(--right)}
+.tick[aria-pressed="true"] .box{background:var(--right);border-color:var(--right)}
+
+.bank{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.6rem}
+.bank div{background:var(--field);border-radius:8px;padding:.7rem .85rem;font-size:.95rem}
+.question{font-size:1.2rem;line-height:1.4;font-weight:600;margin:.2rem 0 .5rem}
+.band{width:100%;border-collapse:collapse;font-size:.93rem}
+.band td{border-top:1px solid var(--line);padding:.45rem .4rem;vertical-align:top}
+.band td:first-child{font-family:var(--stencil);font-size:1.3rem;color:var(--khaki);width:2.2rem}
+.interp{background:var(--paper);border:1px solid var(--line);border-left:6px solid var(--khaki);border-radius:6px;padding:1rem 1.2rem;margin-bottom:1rem}
+.interp h3{margin:0 0 .3rem;font-size:1.05rem}
+.interp p{margin:0}
+
+.self-row{display:flex;justify-content:space-between;align-items:center;gap:.6rem;border-bottom:1px solid var(--line);padding:.5rem 0;flex-wrap:wrap}
+.seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:.3rem .65rem;cursor:pointer;font-size:.88rem}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+.debrief{background:var(--hud);color:var(--hud-ink);border-radius:14px;padding:2rem 2.2rem;margin-bottom:1.4rem;display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center}
+.debrief .big{font-family:var(--stencil);font-size:4.5rem;line-height:1;color:var(--gold-bright)}
+.debrief h2{margin:0;font-family:var(--stencil);font-size:2rem}
+.debrief p{margin:.3rem 0 0;color:#C8D0D3}
+.medals{display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));gap:.8rem}
+.medals .badge-slot{flex-direction:column;text-align:center;justify-content:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:1rem}
+#exportBox{min-height:12rem;font-size:.9rem}
+
+.foot{display:flex;justify-content:space-between;margin-top:2rem}
+
+/* Bonus */
+.locked{text-align:center;padding:3rem 2rem;background:var(--paper);border:2px dashed var(--line);border-radius:14px}
+.locked .medal{margin:0 auto 1rem;width:4rem;height:4rem;font-size:1.6rem}
+.locked h2{font-family:var(--stencil);font-size:2rem;margin:0 0 .4rem}
+.gate{height:10px;background:var(--field);border-radius:5px;max-width:26rem;margin:1rem auto;overflow:hidden}
+.gate i{display:block;height:100%;background:var(--gold)}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.9rem;margin-top:.8rem}
+.para{background:var(--bg);border-left:5px solid var(--khaki);border-radius:6px;padding:1rem 1.2rem;margin:.6rem 0 1rem}
+.para p{margin:0}
+.rubric{width:100%;border-collapse:collapse;font-size:.95rem}
+.rubric td{border-top:1px solid var(--line);padding:.55rem .3rem;vertical-align:top}
+.rubric td:last-child{text-align:right;white-space:nowrap}
+.rubric .ex{display:block;font-size:.86rem;margin-top:.25rem}
+.rubric .ex.match{color:var(--right)} .rubric .ex.near{color:var(--gold)} .rubric .ex.miss{color:var(--wrong)}
+.marks{display:flex;gap:.3rem;flex-wrap:wrap}
+.marks button{width:2.4rem;height:2.4rem;border:1px solid var(--line);background:var(--paper);border-radius:6px;cursor:pointer;font-family:var(--stencil);font-size:1.1rem}
+.marks button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.range{font-family:var(--stencil);font-size:1.6rem;color:var(--gold)}
+.namefield{width:100%;font:inherit;padding:.5rem .7rem;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+
+/* Toasts */
+.toasts{position:fixed;right:1.4rem;bottom:calc(1.4rem + env(safe-area-inset-bottom,0px));z-index:40;display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
+.toast{background:var(--hud);color:var(--hud-ink);border-left:5px solid var(--gold-bright);border-radius:8px;padding:.6rem 1rem;font-size:.95rem;box-shadow:0 6px 18px rgba(0,0,0,.25);animation:tin .3s ease-out}
+.toast b{font-family:var(--stencil);color:var(--gold-bright);font-weight:400;font-size:1.1rem;margin-right:.35rem}
+@keyframes tin{from{transform:translateY(12px);opacity:0}}
+
+/* Rank-up moment */
+.rankup{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(17,23,26,.72)}
+.rankup.show{display:grid}
+.rankup .card{background:var(--hud);color:var(--hud-ink);border:2px solid var(--gold-bright);border-radius:16px;padding:2.4rem 3rem;text-align:center;max-width:30rem;animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+.rankup .card small{color:#C8D0D3;font-size:1rem}
+.rankup .card h2{font-family:var(--stencil);font-size:2.8rem;line-height:1.05;margin:.4rem 0 .8rem;color:var(--gold-bright)}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+@media (prefers-reduced-motion: reduce){.toast,.rankup .card{animation:none}.bar i{transition:none}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<header class="hud">
+  <div class="hud-in">
+    <div class="brand">Christmas <span>1914</span></div>
+    <nav class="route" id="route" aria-label="Lesson stages"></nav>
+    <div class="timer">
+      <div class="clock" id="clock" aria-live="polite">10:00</div>
+      <button class="hbtn solid" id="tStart">Start</button>
+      <button class="hbtn" id="tReset">Reset</button>
+    </div>
+    <div class="xp">
+      <div class="xp-top"><span class="xp-num" id="xpNum">0 XP</span><span class="rank" id="rankName">Hearsay</span></div>
+      <div class="bar"><i id="xpBar"></i></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- STAGE 1 -->
+<section class="stage" data-min="10">
+  <div class="stage-head">
+    <div><h1>The history of yesterday</h1><p>Welcome, Marielle. Before we look at 1914, think about how history gets made from the sources that survive.</p></div>
+    <div class="badge-slot" data-badge="0"></div>
+  </div>
+  <div class="split">
+    <div>
+      <div class="panel" data-write="hook1" data-min-words="40" data-xp="30">
+        <div class="meta"><h2>Write an account of your day yesterday in five sentences.</h2><span class="pts"></span></div>
+        <p class="hint">Aim for about 40 words or more.</p>
+      </div>
+    </div>
+    <div>
+      <div class="panel" data-write="hook2" data-min-words="40" data-xp="40">
+        <div class="meta"><h2>A historian in 2126 wants to reconstruct your day.</h2><span class="pts"></span></div>
+        <p class="hint">What sources would survive? What would be lost? Whose version would they believe, and why?</p>
+      </div>
+      <div class="context"><p>Keep this in mind all lesson: every source is someone’s version of events, written for a reason.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STAGE 2 -->
+<section class="stage" data-min="25">
+  <div class="stage-head">
+    <div><h1>Source detective</h1><p>Four sources, one strange Christmas. Read closely, work out who wrote what and why, then use them as a historian would.</p></div>
+    <div class="badge-slot" data-badge="1"></div>
+  </div>
+  <div class="split">
+    <aside class="sticky" aria-label="Sources">
+      <div class="context">
+        <p>By December 1914 the war that many expected to be over by Christmas had settled into lines of trenches from the Belgian coast to Switzerland. On Christmas Eve and Christmas Day, in parts of the line where British and German troops faced each other, men stopped fighting.</p>
+        <p><em>These sources have been adapted and shortened for this lesson.</em></p>
+      </div>
+      <div class="tabs" role="tablist" data-sourcetabs></div>
+      <div data-sourceview></div>
+    </aside>
+    <div>
+      <div class="panel" data-write="q1" data-min-words="30" data-xp="30">
+        <div class="meta"><h2>1. According to Source A, how did the truce begin and develop?</h2><span class="pts"></span></div>
+        <p class="hint">3 marks, about 4 minutes. Pick out three separate points.</p>
+      </div>
+
+      <div class="panel" data-sorter="prov">
+        <div class="meta"><h2>Who wrote it, and why?</h2><span class="pts"></span></div>
+        <p class="hint">Drag each clue onto the source it describes, then check your answers.</p>
+      </div>
+
+      <div class="panel" data-sorter="opvl">
+        <div class="meta"><h2>Source D: value or limitation?</h2><span class="pts"></span></div>
+        <p class="hint">Sort each statement about Source D.</p>
+      </div>
+
+      <div class="panel" data-write="q2" data-min-words="60" data-xp="40">
+        <div class="meta"><h2>2. With reference to its origin, purpose and content, analyse the value and limitations of Source D for a historian studying the Christmas Truce.</h2><span class="pts"></span></div>
+        <p class="hint">4 marks, about 6 minutes. Tie every point to origin, purpose or content. “Biased” on its own earns nothing.</p>
+      </div>
+
+      <div class="panel" data-sorter="venn">
+        <div class="meta"><h2>Sources B and C: same or different?</h2><span class="pts"></span></div>
+        <p class="hint">Sort each point into Only B, Both, or Only C.</p>
+      </div>
+
+      <div class="panel" data-write="q3" data-min-words="70" data-xp="40">
+        <div class="meta"><h2>3. Compare and contrast what Sources B and C reveal about the Christmas Truce.</h2><span class="pts"></span></div>
+        <p class="hint">6 marks, about 7 minutes. Compare point by point rather than describing B and then C.</p>
+      </div>
+
+      <div class="panel" data-sorter="q4">
+        <div class="meta"><h2>4. To what extent was the truce spontaneous? Plan it.</h2><span class="pts"></span></div>
+        <p class="hint">There is no single right answer here. Place each source, then write your judgement below.</p>
+      </div>
+      <div class="panel" data-write="q4w" data-min-words="30" data-xp="30">
+        <div class="meta"><h2>Your judgement, with reasons</h2><span class="pts"></span></div>
+        <p class="hint">One sentence that answers “to what extent”, then explain how you would handle the sources that challenge it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAGE 3 -->
+<section class="stage" data-min="20">
+  <div class="stage-head">
+    <div><h1>Why did it happen?</h1><p>Sort the causes, rank them, then turn your ranking into an argument.</p></div>
+    <div class="badge-slot" data-badge="2"></div>
+  </div>
+  <div class="panel" data-sorter="causes">
+    <div class="meta"><h2>Long-term, short-term or trigger?</h2><span class="pts"></span></div>
+    <p class="hint">Drag each cause into a column, then check against a model answer. Historians can disagree, so be ready to defend your choices.</p>
+  </div>
+  <div class="panel" id="diamondPanel">
+    <div class="meta"><h2>Rank them in a diamond nine</h2><span class="pts"></span></div>
+    <p class="hint">Drag causes into the diamond, most important at the top. Drag between spaces to swap, or double-click a placed cause to send it back. Then explain your top choice out loud.</p>
+    <div class="diamond-wrap">
+      <div class="dcol"><div class="dpool" id="dpool" aria-label="Causes to place"></div></div>
+      <div class="dcol"><div class="dlabel">Most important</div><div class="diamond" id="diamond"></div><div class="dlabel">Least important</div></div>
+    </div>
+  </div>
+  <div class="panel" data-write="thesis" data-xp="50" data-thesis>
+    <div class="meta"><h2>Write your thesis</h2><span class="pts"></span></div>
+    <p class="hint">One sentence that makes a claim someone could disagree with, and gives a reason.</p>
+    <ul class="checks" data-thesischecks>
+      <li data-c="len">At least 15 words</li>
+      <li data-c="reason">Gives a reason (because, since, as, which meant, due to)</li>
+      <li data-c="claim">Makes a claim, not a list (avoid “there were many causes”)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- STAGE 4 -->
+<section class="stage" data-min="20">
+  <div class="stage-head">
+    <div><h1>Writing the argument</h1><p>Paper 2 skills: answer the question you are asked, analyse rather than narrate, and reach a judgement.</p></div>
+    <div class="badge-slot" data-badge="3"></div>
+  </div>
+  <div class="split">
+    <aside class="sticky">
+      <div class="panel">
+        <p class="question">Discuss the reasons why the Christmas Truce of 1914 occurred in some sectors of the Western Front but not others.</p>
+        <p class="hint">Discuss: offer a considered review with a range of arguments and factors, supported by evidence, and reach a judgement.</p>
+      </div>
+      <div class="panel">
+        <h2>Evidence bank</h2>
+        <div class="bank">
+          <div>Mostly between British and German troops in Flanders. Far less common where French and Belgian troops faced the Germans on occupied home soil.</div>
+          <div>In some sectors fighting carried on through Christmas Day, and men were killed.</div>
+          <div>Saxon and Bavarian regiments are often described as more willing to fraternise than Prussian units.</div>
+          <div>Where opposing trenches were very close, men could hear and shout to each other.</div>
+          <div>Local officers reacted differently. Some joined in, some turned a blind eye, others forbade contact.</div>
+          <div>High commands on both sides ordered an end to fraternisation. It was not repeated on the same scale in 1915.</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>How your writing will be judged</h2>
+        <table class="band">
+          <tr><td>4</td><td>A clear, focused argument throughout. Specific evidence supports each point. Different views are weighed and a judgement is reached.</td></tr>
+          <tr><td>3</td><td>Mostly focused. Relevant evidence, sometimes general. Some analysis, but parts slip into description.</td></tr>
+          <tr><td>2</td><td>Some understanding of the question. Limited evidence. Mostly narrative.</td></tr>
+          <tr><td>1</td><td>Little focus on the question. Mostly description.</td></tr>
+        </table>
+      </div>
+    </aside>
+    <div>
+      <div class="panel" data-sorter="analysis">
+        <div class="meta"><h2>Analysis or narrative?</h2><span class="pts"></span></div>
+        <p class="hint">Analysis explains why or how and links to the question. Narrative tells what happened.</p>
+      </div>
+      <div class="panel" data-write="intro" data-min-words="60" data-xp="40">
+        <div class="meta"><h2>Your introduction</h2><span class="pts"></span></div>
+        <p class="hint">Answer the question straight away with a clear line of argument.</p>
+      </div>
+      <div class="panel" data-write="body" data-min-words="120" data-xp="60">
+        <div class="meta"><h2>One body paragraph</h2><span class="pts"></span></div>
+        <p class="hint">Open with an analytical point, support it with specific evidence, explain it, and link back to the question.</p>
+      </div>
+      <div class="panel" data-ticks="essaycheck">
+        <div class="meta"><h2>Check your own writing</h2><span class="pts"></span></div>
+        <p class="hint">Tick only what is honestly true of what you wrote.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAGE 5 -->
+<section class="stage" data-min="10">
+  <div class="stage-head">
+    <div><h1>Why historians disagree</h1><p>Two readings of the same event. Work out what each rests on.</p></div>
+    <div class="badge-slot" data-badge="4"></div>
+  </div>
+  <div class="split">
+    <aside class="sticky">
+      <div class="interp"><h3>Interpretation 1</h3><p>The Christmas Truce was an act of spontaneous humanity by ordinary soldiers. Men who shared the misery of the trenches recognised one another as fellow sufferers, and on the one day of the year that meant something to both sides, they simply stopped. That it happened without, and often against, the wishes of the high command shows how weak the hold of official hatred was on the men who actually did the fighting.</p></div>
+      <div class="interp"><h3>Interpretation 2</h3><p>The truce should not be romanticised. It was patchy, limited to parts of the line, and short-lived; in many sectors fighting continued on Christmas Day. It grew out of the informal “live and let live” arrangements already common in quiet sectors, and soldiers used it for practical ends such as burying the dead, repairing trenches and observing the enemy. High commands suppressed it quickly, and it was never repeated on the same scale.</p></div>
+      <p class="hint">Written for this lesson. Each represents a position historians have taken.</p>
+    </aside>
+    <div>
+      <div class="panel" data-sorter="interp">
+        <div class="meta"><h2>Which historian would use it?</h2><span class="pts"></span></div>
+        <p class="hint">Drag each piece of evidence to the interpretation it best supports.</p>
+      </div>
+      <div class="panel" data-write="i1" data-min-words="30" data-xp="30">
+        <div class="meta"><h2>Sum up each interpretation in one sentence.</h2><span class="pts"></span></div>
+      </div>
+      <div class="panel" data-write="i2" data-min-words="40" data-xp="40">
+        <div class="meta"><h2>Why might historians reach such different conclusions? Which is more convincing so far?</h2><span class="pts"></span></div>
+        <p class="hint">Think about their sources, the questions they ask, and when they are writing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BONUS -->
+<section class="stage" data-min="10" id="bonusStage">
+  <div class="stage-head">
+    <div><h1>Bonus round: mark this answer</h1><p>Swap sides. Two students answered the essay question from Stage 4. Judge each paragraph like an examiner.</p></div>
+    <div class="badge-slot" data-badge="5"></div>
+  </div>
+  <div class="locked" id="bonusLocked">
+    <div class="medal">?</div>
+    <h2>Locked</h2>
+    <p class="hint" id="gateText">Reach 70 percent of the lesson’s points to unlock the bonus round.</p>
+    <div class="gate"><i id="gateBar"></i></div>
+    <button class="linkbtn" id="tutorUnlock">Leah: unlock it now</button>
+  </div>
+  <div id="bonusBody" hidden>
+    <div class="split">
+      <aside class="sticky">
+        <div class="panel">
+          <p class="question">Discuss the reasons why the Christmas Truce of 1914 occurred in some sectors of the Western Front but not others.</p>
+          <p class="hint">Each paragraph is marked out of 8. For each one, decide whether it meets each criterion, choose a mark, then submit to compare with the examiner.</p>
+        </div>
+        <div class="panel">
+          <h2>The criteria</h2>
+          <ol style="padding-left:1.2rem;margin:.4rem 0 0" id="criteriaList"></ol>
+        </div>
+      </aside>
+      <div>
+        <div class="panel" data-mta="0"><div class="meta"><h2>Paragraph 1</h2><span class="pts"></span></div></div>
+        <div class="panel" data-mta="1"><div class="meta"><h2>Paragraph 2</h2><span class="pts"></span></div></div>
+        <div class="panel" data-write="upgrade" data-min-words="80" data-xp="40">
+          <div class="meta"><h2>Upgrade it: rewrite Paragraph 1 so it would reach the top of the mark range.</h2><span class="pts"></span></div>
+          <p class="hint">Fix whatever the examiner found missing. Keep what already works.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAGE 6 -->
+<section class="stage" data-min="5">
+  <div class="stage-head">
+    <div><h1>Debrief</h1><p>Well done, Marielle. See how you did, rate your skills honestly, and send your work to Leah.</p></div>
+    <div class="badge-slot" data-badge="6"></div>
+  </div>
+  <div class="debrief">
+    <div class="big" id="finalXp">0</div>
+    <div><h2 id="finalRank">Hearsay</h2><p id="finalNext"></p></div>
+  </div>
+  <div class="medals" id="medals" style="margin-bottom:1.4rem"></div>
+  <div class="split">
+    <div>
+      <div class="panel" id="selfPanel">
+        <div class="meta"><h2>Rate yourself</h2><span class="pts"></span></div>
+        <div id="selfGrid"></div>
+      </div>
+    </div>
+    <div>
+      <div class="panel" data-write="strength" data-min-words="8" data-xp="15">
+        <div class="meta"><h2>One thing I did well</h2><span class="pts"></span></div>
+      </div>
+      <div class="panel" data-write="target" data-min-words="8" data-xp="15">
+        <div class="meta"><h2>One thing I want to improve</h2><span class="pts"></span></div>
+      </div>
+      <div class="panel" data-write="course" data-min-words="8" data-xp="20">
+        <div class="meta"><h2>My IB History course</h2><span class="pts"></span></div>
+        <p class="hint">Your Paper 1 prescribed subject, Paper 2 world history topics, and HL option if you take HL.</p>
+      </div>
+      <div class="panel">
+        <h2>Send your work</h2>
+        <p class="hint">Download a PDF of everything you did today, or copy it into a message to Leah.</p>
+        <label class="hint" for="stuName" style="display:block;margin-bottom:.3rem">Your name, for the PDF</label>
+        <input class="namefield" id="stuName" autocomplete="name">
+        <div class="row"><button class="btn solid" id="pdfBtn" disabled>Download PDF</button><button class="btn" id="copyAll">Copy all my work</button><span class="hint" id="copyMsg" aria-live="polite" style="margin:0"></span></div>
+        <textarea id="exportBox" readonly aria-label="All your work" style="margin-top:.8rem"></textarea>
+        <div class="row"><button class="btn" id="resetAll">Clear everything and start again</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="foot"><button class="btn" id="prev">Previous stage</button><button class="btn solid" id="next">Next stage</button></div>
+</main>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="rankup" id="rankup" role="dialog" aria-modal="true" aria-labelledby="rankTitle">
+  <div class="card"><small>New rank</small><h2 id="rankTitle"></h2><p id="rankText" style="margin:0 0 1.2rem;color:#C8D0D3"></p><button class="hbtn solid" id="rankClose">Carry on</button></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- Persistence ---------- */
+const KEY="truce1914-app-v2";
+let S;
+try{ S=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ S=null; }
+if(!S||typeof S!=="object") S={};
+S.xp=S.xp||{}; S.text=S.text||{}; S.sort=S.sort||{}; S.slots=S.slots||Array(9).fill(null); S.ticks=S.ticks||{}; S.self=S.self||{}; S.badges=S.badges||{}; S.stage=S.stage||0; S.rank=S.rank||0; S.mta=S.mta||{}; S.name=S.name||"Marielle";
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+/* ---------- Content ---------- */
+const SOURCES={
+ A:{prov:"A letter from a British rifleman to his family, published in his local newspaper in January 1915.",txt:"On Christmas Eve the Germans started putting little trees with candles along the top of their trench, and then we heard them singing. We sang back, and between the songs they shouted across to us. Nobody fired a shot all night. In the morning one of their men climbed out and walked towards us with his hands up, and before long men from both sides were out in the middle, shaking hands and swapping cigarettes, buttons and tins of beef for sausage and cigars. Some of them spoke good English, and one said he had worked as a waiter in Brighton. It was the strangest day of my life. You would hardly believe we had been trying to kill each other the day before."},
+ B:{prov:"A report in a British national daily newspaper, early January 1915.",txt:"Letters reaching us from the front tell a remarkable story of Christmas Day in the trenches. In several places along the line, it seems, British and German soldiers met in the open ground between the trenches and passed the day in friendly conversation. We print some of these letters today. Our readers should not draw the wrong conclusions. This was a brief interlude, owed to the season, and it has done nothing to soften the resolve of our men, who are as determined as ever to see the war through to victory. Indeed, those who met the enemy report that he is tired of the war and short of comforts, which can only encourage us."},
+ C:{prov:"The official war diary of a British infantry battalion, entry for 25 December 1914. War diaries were kept by an officer and sent to higher command.",txt:"25 Dec. Hard frost. Very quiet. No firing during the night. Germans shouted Christmas greetings and came out of their trenches unarmed at about 8.30 a.m. Some of our men went out to meet them. Opportunity taken to bury our dead lying between the lines; Germans assisted. Officers observed enemy parapet and wire, which is stronger than believed. Men returned to trenches by dusk. Orders received from Brigade that fraternisation is not to be permitted. Casualties: nil.",mono:true},
+ D:{prov:"From a memoir written in the 1960s by a former soldier in a Saxon (German) regiment.",txt:"Nobody gave an order. It came from us, the ordinary men, who had lain in the mud for weeks opposite fellows just as wretched as ourselves. When I think of that Christmas now, after everything that came later, it seems like a dream. We showed each other photographs of our wives and children. We sang Stille Nacht and they answered with their own hymns. For a few hours we were not Saxons and Englishmen but simply men. Our officers were furious afterwards and we were moved to another part of the line soon after. I have never forgotten it, and I believe that if it had been left to the soldiers, the war would have ended that day."}
+};
+
+const SORTERS={
+ prov:{xpEach:10,cols:4,bins:[["A","Source A"],["B","Source B"],["C","Source C"],["D","Source D"]],items:[
+  ["Written for family at home, later printed in a local paper","A","A private letter that a newspaper chose to print."],
+  ["Written for a national readership in wartime","B","A national daily speaking to the whole country."],
+  ["An official record sent to higher command","C","War diaries were kept by an officer for the army."],
+  ["Written decades later, looking back","D","A memoir from the 1960s."],
+  ["Short, practical language with no feelings expressed","C","The diary records facts: frost, burials, wire, orders."],
+  ["Tries to control how readers interpret the event","B","Readers should not draw the wrong conclusions."],
+  ["Emotional and reflective in tone","D","It seems like a dream; simply men."],
+  ["An eyewitness writing within weeks of the event","A","A soldier describing it to his family soon after."]]},
+ opvl:{xpEach:10,cols:2,bins:[["V","Value"],["L","Limitation"]],items:[
+  ["Gives a German perspective to balance the British sources","V","Hearing from the other side is valuable for a historian."],
+  ["Written around fifty years after the events","L","Memory fades and changes over five decades."],
+  ["Shows how an ordinary soldier understood the truce","V","It reveals the meaning the truce had for participants."],
+  ["The writer’s view may be shaped by “everything that came later”","L","Hindsight about the rest of the war may colour the memory."],
+  ["Claims the war would have ended, which is speculation","L","A counterfactual, not evidence."],
+  ["Includes eyewitness detail, such as sharing photographs of families","V","Specific detail from someone who was there."],
+  ["Describes one soldier’s experience of one part of the line","L","It cannot tell us how typical this was."]]},
+ venn:{xpEach:10,cols:3,bins:[["B","Only B"],["BC","Both"],["C","Only C"]],items:[
+  ["Confirms the truce happened at Christmas","BC","Both sources describe Christmas Day contact."],
+  ["Soldiers met in the ground between the trenches","BC","B: met in the open ground. C: men went out to meet them."],
+  ["The truce was temporary","BC","B: a brief interlude. C: men returned to trenches by dusk."],
+  ["Records that the dead were buried","C","Only the war diary mentions burials."],
+  ["Mentions orders against fraternisation","C","The diary records the order from Brigade."],
+  ["Reassures readers that morale is unaffected","B","The newspaper insists resolve is undiminished."],
+  ["Suggests the enemy is short of supplies","B","B claims the enemy is tired and short of comforts."],
+  ["Notes the enemy’s defences were stronger than thought","C","Officers used the truce to observe the enemy’s wire."]]},
+ q4:{xpEach:0,xpAll:30,open:true,cols:3,bins:[["S","Suggests spontaneous"],["M","Mixed"],["P","Suggests planned or controlled"]],items:[
+  ["Source A: the rifleman’s letter"],["Source B: the newspaper report"],["Source C: the war diary"],["Source D: the Saxon memoir"]]},
+ causes:{xpEach:10,cols:3,bins:[["L","Long-term"],["S","Short-term"],["T","Trigger"]],items:[
+  ["Exhaustion and misery after months in cold, flooded trenches","S","Built up over the autumn of 1914."],
+  ["Trenches so close that men could hear and shout to each other","S","A condition of the new trench lines."],
+  ["A shared Christian culture and Christmas traditions","L","Centuries old, shared by both sides."],
+  ["Local officers who tolerated or joined in","S","Decisions made on the spot."],
+  ["A hard frost that made no man’s land easier to cross","S","A condition on the day, but it did not start anything."],
+  ["Disappointment that the war would not be over by Christmas","S","A mood that grew through late 1914."],
+  ["The need to bury the dead lying between the lines","S","A pressing practical need that winter."],
+  ["Informal “live and let live” habits already common in quiet sectors","L","A pattern that existed before Christmas."],
+  ["Christmas trees, candles and carols on the German parapets on Christmas Eve","T","The spark that set contact going."]]},
+ analysis:{xpEach:10,cols:2,bins:[["A","Analysis"],["N","Narrative"]],items:[
+  ["On Christmas Eve, German soldiers put up trees and began singing carols.","N","It tells what happened, without explaining why."],
+  ["The truce was most likely where trenches were close, because proximity made contact possible before anyone had to decide to trust the enemy.","A","It explains why, and links to the question."],
+  ["In some sectors, fighting continued on Christmas Day.","N","A useful fact, but not yet an argument."],
+  ["Local officers mattered more than high command, since orders from above arrived only after the truce had begun.","A","It weighs two factors and gives a reason."],
+  ["Saxon regiments were often friendlier than Prussian ones.","N","A description. What would make it analysis?"],
+  ["The contrast with French sectors suggests that occupation of home soil made fraternisation unthinkable for many soldiers.","A","It draws a conclusion from a comparison."]]},
+ interp:{xpEach:10,cols:2,bins:[["1","Interpretation 1"],["2","Interpretation 2"]],items:[
+  ["Source A: the rifleman’s letter","1","Men mingling freely and marvelling at it."],
+  ["Source D: “Nobody gave an order”","1","It presents the truce as coming from ordinary men."],
+  ["Source C: dead buried and enemy wire observed","2","Practical uses of the truce, recorded by an officer."],
+  ["Source B: “a brief interlude” that changed nothing","2","It stresses how limited the truce was."],
+  ["Fighting continued in some sectors on Christmas Day","2","The truce was patchy."],
+  ["The truce was not repeated on the same scale in 1915","2","It was suppressed and did not last."]]}
+};
+
+const TICKS={essaycheck:{xpEach:5,items:["My introduction answers the question directly.","My introduction mentions “some sectors but not others”.","My paragraph opens with an analytical point, not a story.","I used at least one specific piece of evidence.","I explained how my evidence supports my point.","I linked back to the question at the end of the paragraph."]}};
+
+const SKILLS=["Reading a source closely","Judging a source’s value and limitations","Comparing two sources","Using several sources to reach a judgement","Explaining and ranking causes","Writing a clear thesis","Building an analytical paragraph","Explaining why historians disagree"];
+
+const BADGES=[
+ {name:"Time traveller",mark:"I",keys:["w:hook1","w:hook2"]},
+ {name:"Source detective",mark:"II",keys:["w:q1","s:prov","s:opvl","w:q2","s:venn","w:q3","s:q4","w:q4w"]},
+ {name:"Cause mapper",mark:"III",keys:["s:causes","diamond","w:thesis"]},
+ {name:"Argument architect",mark:"IV",keys:["s:analysis","w:intro","w:body","t:essaycheck"]},
+ {name:"Historiographer",mark:"V",keys:["s:interp","w:i1","w:i2"]},
+ {name:"Examiner’s eye",mark:"★",keys:["b:0","b:1","w:upgrade"]},
+ {name:"Reflective historian",mark:"VI",keys:["self","w:strength","w:target","w:course"]}
+];
+const BADGE_XP=25;
+const RANKS=[[0,"Hearsay","Unverified, for now."],[200,"Eyewitness","You were there, and you noticed things."],[450,"Primary source","Historians would cite you."],[700,"Peer reviewed","Your arguments hold up under scrutiny."],[950,"Set text","Required reading."]];
+
+/* ---------- XP ---------- */
+const totalXP=()=>Object.values(S.xp).reduce((a,b)=>a+b,0);
+function rankIndex(x){ let r=0; RANKS.forEach((k,i)=>{ if(x>=k[0]) r=i; }); return r; }
+function award(key, pts, label){
+  if(S.xp[key]!==undefined) return false;
+  S.xp[key]=pts; save();
+  if(pts>0) toast(pts, label);
+  checkBadges(); updateHUD();
+  return true;
+}
+function isDone(key){ return S.xp[key]!==undefined; }
+function checkBadges(){
+  BADGES.forEach((b,i)=>{
+    if(!S.badges[i] && b.keys.every(isDone)){
+      S.badges[i]=true; S.xp["badge:"+i]=BADGE_XP; save();
+      toast(BADGE_XP, "Badge earned: "+b.name);
+    }
+  });
+  renderBadges();
+}
+function toast(pts,label){
+  const t=document.createElement("div"); t.className="toast";
+  t.innerHTML=pts?"<b>+"+pts+"</b>":""; t.appendChild(document.createTextNode(label));
+  document.getElementById("toasts").appendChild(t);
+  setTimeout(()=>t.remove(),3200);
+}
+const rankup=document.getElementById("rankup");
+document.getElementById("rankClose").addEventListener("click",()=>rankup.classList.remove("show"));
+function updateHUD(){
+  const x=totalXP(), r=rankIndex(x);
+  document.getElementById("xpNum").textContent=x+" XP";
+  document.getElementById("rankName").textContent=RANKS[r][1];
+  const lo=RANKS[r][0], hi=RANKS[r+1]?RANKS[r+1][0]:lo;
+  document.getElementById("xpBar").style.width=(RANKS[r+1]? Math.min(100,(x-lo)/(hi-lo)*100):100)+"%";
+  document.getElementById("finalXp").textContent=x;
+  document.getElementById("finalRank").textContent=RANKS[r][1];
+  document.getElementById("finalNext").textContent= RANKS[r+1] ? (RANKS[r+1][0]-x)+" XP to reach "+RANKS[r+1][1]+"." : "Top rank reached.";
+  if(r>S.rank){
+    S.rank=r; save();
+    document.getElementById("rankTitle").textContent=RANKS[r][1];
+    document.getElementById("rankText").textContent=RANKS[r][2];
+    rankup.classList.add("show"); document.getElementById("rankClose").focus();
+  }
+  document.querySelectorAll(".route button").forEach((b,i)=>b.classList.toggle("done",!!S.badges[i]));
+  if(typeof refreshGate==="function") try{ refreshGate(); }catch(_){}
+}
+function renderBadges(){
+  document.querySelectorAll("[data-badge]").forEach(el=>{
+    const i=+el.dataset.badge, b=BADGES[i], got=!!S.badges[i];
+    el.className="badge-slot"+(got?" earned":"");
+    el.innerHTML='<span>'+(got?"Badge earned<br>":"Badge to earn<br>")+'<strong>'+b.name+'</strong></span><span class="medal">'+b.mark+'</span>';
+  });
+  const m=document.getElementById("medals"); m.innerHTML="";
+  BADGES.forEach((b,i)=>{
+    const d=document.createElement("div"); d.className="badge-slot"+(S.badges[i]?" earned":"");
+    d.innerHTML='<span class="medal">'+b.mark+'</span><strong>'+b.name+'</strong><span>'+(S.badges[i]?"Earned":"Not yet")+'</span>';
+    m.appendChild(d);
+  });
+}
+function markPanel(panel,key,pts){
+  const p=panel.querySelector(".pts"); if(p) p.textContent=pts+" XP";
+  panel.classList.toggle("complete", isDone(key));
+}
+
+/* ---------- Stages and timer ---------- */
+const stages=[...document.querySelectorAll("section.stage")];
+const names=["Yesterday","Sources","Causes","Argument","Historians","Bonus","Debrief"];
+const route=document.getElementById("route");
+stages.forEach((s,i)=>{
+  const b=document.createElement("button");
+  b.innerHTML='<span class="n">'+(i+1)+'</span><span class="lbl">'+names[i]+'</span>'; b.title=names[i]; b.setAttribute("aria-label",names[i]);
+  b.addEventListener("click",()=>go(i)); route.appendChild(b);
+});
+let cur=Math.min(Math.max(+S.stage||0,0),stages.length-1);
+function go(i){
+  cur=i; S.stage=i; save();
+  stages.forEach((s,j)=>s.classList.toggle("active",i===j));
+  [...route.children].forEach((b,j)=>j===i?b.setAttribute("aria-current","step"):b.removeAttribute("aria-current"));
+  document.getElementById("prev").disabled=i===0;
+  document.getElementById("next").disabled=i===stages.length-1;
+  resetTimer(); window.scrollTo(0,0);
+  if(i===stages.length-1) gather();
+}
+document.getElementById("prev").addEventListener("click",()=>cur>0&&go(cur-1));
+document.getElementById("next").addEventListener("click",()=>cur<stages.length-1&&go(cur+1));
+
+const clock=document.getElementById("clock"), tStart=document.getElementById("tStart");
+let remaining=0,tick=null;
+const fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+function resetTimer(){ clearInterval(tick); tick=null; remaining=(+stages[cur].dataset.min)*60; clock.classList.remove("done"); tStart.textContent="Start"; clock.textContent=fmt(remaining); }
+tStart.addEventListener("click",()=>{
+  if(tick){ clearInterval(tick); tick=null; tStart.textContent="Resume"; return; }
+  if(remaining<=0) resetTimer();
+  tStart.textContent="Pause";
+  tick=setInterval(()=>{ remaining--; clock.textContent=fmt(remaining); if(remaining<=0){ clearInterval(tick); tick=null; clock.classList.add("done"); tStart.textContent="Start"; toast(0,"Time is up for this stage."); } },1000);
+});
+document.getElementById("tReset").addEventListener("click",resetTimer);
+
+/* ---------- Sources viewer ---------- */
+document.querySelectorAll("[data-sourcetabs]").forEach(tabs=>{
+  const view=tabs.parentElement.querySelector("[data-sourceview]");
+  let active=S.srcTab||"A";
+  function show(L){
+    active=L; S.srcTab=L; save();
+    [...tabs.children].forEach(b=>b.setAttribute("aria-selected",b.dataset.l===L));
+    const s=SOURCES[L];
+    view.innerHTML=""; const d=document.createElement("article"); d.className="source"+(s.mono?" mono":"");
+    const p1=document.createElement("p"); p1.className="prov"; p1.textContent=s.prov;
+    const p2=document.createElement("p"); p2.className="txt"; p2.textContent=s.txt;
+    d.append(p1,p2); view.appendChild(d);
+  }
+  Object.keys(SOURCES).forEach(L=>{
+    const b=document.createElement("button"); b.textContent=L; b.dataset.l=L; b.setAttribute("role","tab");
+    b.setAttribute("aria-label","Source "+L); b.addEventListener("click",()=>show(L)); tabs.appendChild(b);
+  });
+  show(active);
+});
+
+/* ---------- Writing tasks ---------- */
+const wc=t=>t.trim()?t.trim().split(/\s+/).length:0;
+document.querySelectorAll("[data-write]").forEach(panel=>{
+  const k=panel.dataset.write, key="w:"+k, xp=+panel.dataset.xp, min=+panel.dataset.minWords||0;
+  const ta=document.createElement("textarea"); ta.setAttribute("aria-label",panel.querySelector("h2").textContent);
+  if(min>=60) ta.classList.add("tall");
+  ta.value=S.text[k]||"";
+  const info=document.createElement("div"); info.className="wc";
+  const checks=panel.querySelector("[data-thesischecks]");
+  if(checks) panel.insertBefore(ta,checks); else panel.appendChild(ta);
+  if(!checks) panel.appendChild(info);
+  function update(){
+    const n=wc(ta.value);
+    if(checks){
+      const v=ta.value.toLowerCase();
+      const res={len:n>=15, reason:/\b(because|since|as|which meant|meant that|due to|so that|therefore)\b/.test(v), claim:n>=6 && !/(many|several|a number of|various|lots of) (causes|reasons|factors)/.test(v)};
+      checks.querySelectorAll("li").forEach(li=>li.classList.toggle("met",!!res[li.dataset.c]));
+      if(res.len&&res.reason&&res.claim) award(key,xp,"Thesis ready");
+    } else {
+      info.innerHTML='<span>'+n+(n===1?" word":" words")+'</span><span class="goal'+(n>=min?" met":"")+'">'+(n>=min?"Goal reached":"Goal: "+min+" words")+'</span>';
+      if(n>=min) award(key,xp,panel.querySelector("h2").textContent.replace(/^\d\.\s*/,"").slice(0,48)+(panel.querySelector("h2").textContent.length>48?"…":""));
+    }
+    markPanel(panel,key,xp);
+  }
+  ta.addEventListener("input",()=>{ S.text[k]=ta.value; save(); update(); });
+  update();
+});
+
+/* ---------- Drag and drop helpers ---------- */
+let dragData=null, selected=null;
+function makeDraggable(el,data,onSelect){
+  el.draggable=true;
+  el.addEventListener("dragstart",e=>{ dragData=data; el.classList.add("dragging"); try{ e.dataTransfer.setData("text/plain","x"); e.dataTransfer.effectAllowed="move"; }catch(_){} });
+  el.addEventListener("dragend",()=>{ el.classList.remove("dragging"); dragData=null; document.querySelectorAll(".over").forEach(x=>x.classList.remove("over")); });
+  el.addEventListener("click",e=>{ e.stopPropagation(); onSelect(); });
+}
+function makeDrop(el,accept,onDrop){
+  el.addEventListener("dragover",e=>{ if(dragData&&accept(dragData)){ e.preventDefault(); el.classList.add("over"); } });
+  el.addEventListener("dragleave",e=>{ if(!el.contains(e.relatedTarget)) el.classList.remove("over"); });
+  el.addEventListener("drop",e=>{ e.preventDefault(); el.classList.remove("over"); if(dragData&&accept(dragData)){ const d=dragData; dragData=null; onDrop(d); } });
+  el.addEventListener("click",()=>{ if(selected&&accept(selected)){ const d=selected; selected=null; onDrop(d); } });
+}
+
+/* ---------- Sorters ---------- */
+document.querySelectorAll("[data-sorter]").forEach(panel=>{
+  const id=panel.dataset.sorter, cfg=SORTERS[id], key="s:"+id;
+  const st=S.sort[id]=S.sort[id]||{place:{},checked:false};
+  const totalPts=cfg.open?cfg.xpAll:cfg.xpEach*cfg.items.length;
+  const pool=document.createElement("div"); pool.className="pool";
+  const bins=document.createElement("div"); bins.className="bins"; bins.style.gridTemplateColumns="repeat("+cfg.cols+",minmax(0,1fr))";
+  const binEls={};
+  cfg.bins.forEach(([bid,label])=>{
+    const b=document.createElement("div"); b.className="bin";
+    const h=document.createElement("h3"); h.textContent=label; b.appendChild(h);
+    bins.appendChild(b); binEls[bid]=b;
+    makeDrop(b,d=>d.sorter===id,d=>{ st.place[d.i]=bid; save(); render(); });
+  });
+  makeDrop(pool,d=>d.sorter===id,d=>{ delete st.place[d.i]; save(); render(); });
+  const row=document.createElement("div"); row.className="row";
+  const check=document.createElement("button"); check.className="btn solid"; check.textContent=cfg.open?"Lock in my plan":"Check my answers";
+  const again=document.createElement("button"); again.className="btn"; again.textContent="Reset cards";
+  const result=document.createElement("div"); result.className="result";
+  row.append(check,again);
+  panel.append(pool,bins,row,result);
+  check.addEventListener("click",()=>{
+    st.checked=true; save();
+    if(cfg.open){ award(key,cfg.xpAll,"Plan locked in"); }
+    else{
+      let n=0; cfg.items.forEach((it,i)=>{ if(st.place[i]===it[1]) n++; });
+      st.score=n; save();
+      award(key,n*cfg.xpEach,n+" of "+cfg.items.length+" correct");
+    }
+    render();
+  });
+  again.addEventListener("click",()=>{ st.place={}; st.checked=false; save(); render(); });
+  function render(){
+    pool.querySelectorAll(".chip").forEach(c=>c.remove());
+    Object.values(binEls).forEach(b=>b.querySelectorAll(".chip").forEach(c=>c.remove()));
+    cfg.items.forEach((it,i)=>{
+      const c=document.createElement("button"); c.className="chip"; c.textContent=it[0];
+      const data={sorter:id,i};
+      if(selected&&selected.sorter===id&&selected.i===i) c.classList.add("sel");
+      if(st.checked&&!cfg.open&&st.place[i]!==undefined){
+        const ok=st.place[i]===it[1]; c.classList.add(ok?"ok":"no");
+        const fb=document.createElement("span"); fb.className="fb";
+        fb.textContent=ok?it[2]:"Model answer: "+cfg.bins.find(b=>b[0]===it[1])[1]+". "+it[2];
+        c.appendChild(fb);
+      }
+      makeDraggable(c,data,()=>{ selected=(selected&&selected.sorter===id&&selected.i===i)?null:data; renderAllSel(); });
+      (st.place[i]!==undefined?binEls[st.place[i]]:pool).appendChild(c);
+    });
+    const all=Object.keys(st.place).length===cfg.items.length;
+    check.disabled=!all || (st.checked && isDone(key) && !cfg.open);
+    if(cfg.open) check.disabled=!all || isDone(key);
+    Object.values(binEls).forEach(b=>b.classList.toggle("target",!!(selected&&selected.sorter===id)));
+    result.innerHTML="";
+    if(isDone(key)){
+      if(cfg.open) result.textContent="Plan locked in. Now write your judgement.";
+      else result.innerHTML="<strong>"+(st.score??0)+" / "+cfg.items.length+"</strong> correct. "+(st.score===cfg.items.length?"Perfect.":"Read the feedback on the red cards, then move them if you like. XP is awarded on the first check only.");
+    } else if(!all){ result.textContent="Place every card to "+(cfg.open?"lock in your plan.":"check your answers."); }
+    markPanel(panel,key,totalPts);
+  }
+  panel._render=render; render();
+});
+function renderAllSel(){ document.querySelectorAll("[data-sorter]").forEach(p=>p._render&&p._render()); renderDiamond(); }
+
+/* ---------- Diamond nine ---------- */
+const CAUSES=SORTERS.causes.items.map(x=>x[0]);
+const dpool=document.getElementById("dpool"), diamond=document.getElementById("diamond"), dpanel=document.getElementById("diamondPanel");
+if(!Array.isArray(S.slots)||S.slots.length!==9) S.slots=Array(9).fill(null);
+makeDrop(dpool,d=>d.dia,d=>{ if(d.from!=null) S.slots[d.from]=null; save(); renderDiamond(); });
+function renderDiamond(){
+  dpool.innerHTML=""; diamond.innerHTML="";
+  const placed=new Set(S.slots.filter(v=>v!==null));
+  CAUSES.forEach((c,i)=>{
+    if(placed.has(i)) return;
+    const b=document.createElement("button"); b.className="chip"; b.textContent=c;
+    const data={dia:true,c:i,from:null};
+    if(selected&&selected.dia&&selected.c===i&&selected.from==null) b.classList.add("sel");
+    makeDraggable(b,data,()=>{ selected=(selected&&selected.dia&&selected.c===i)?null:data; renderAllSel(); });
+    dpool.appendChild(b);
+  });
+  let idx=0;
+  [1,2,3,2,1].forEach((n,r)=>{
+    const row=document.createElement("div"); row.className="drow";
+    for(let k=0;k<n;k++){
+      const i=idx++, v=S.slots[i];
+      const s=document.createElement("div"); s.className="slot"+(v!==null?" filled":""); s.tabIndex=0;
+      s.textContent=v!==null?CAUSES[v]:(selected&&selected.dia?"Place here":"Rank "+(r+1));
+      s.setAttribute("role","button"); s.setAttribute("aria-label",(v!==null?CAUSES[v]:"Empty")+", rank "+(r+1));
+      makeDrop(s,d=>d.dia,d=>{
+        const prev=S.slots[i];
+        if(d.from!=null){ S.slots[d.from]=prev; } // swap
+        S.slots[i]=d.c; save(); renderDiamond(); checkDiamond();
+      });
+      if(v!==null){
+        const data={dia:true,c:v,from:i};
+        s.draggable=true;
+        s.addEventListener("dragstart",e=>{ dragData=data; try{e.dataTransfer.setData("text/plain","x");}catch(_){} });
+        s.addEventListener("dragend",()=>{ dragData=null; document.querySelectorAll(".over").forEach(x=>x.classList.remove("over")); });
+        s.addEventListener("dblclick",()=>{ S.slots[i]=null; save(); renderDiamond(); });
+      }
+      s.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); s.click(); } });
+      row.appendChild(s);
+    }
+    diamond.appendChild(row);
+  });
+  markPanel(dpanel,"diamond",40);
+}
+function checkDiamond(){ if(S.slots.every(v=>v!==null)) award("diamond",40,"Diamond complete"); markPanel(dpanel,"diamond",40); }
+renderDiamond();
+
+/* ---------- Self-check ticks ---------- */
+document.querySelectorAll("[data-ticks]").forEach(panel=>{
+  const id=panel.dataset.ticks, cfg=TICKS[id], key="t:"+id;
+  const st=S.ticks[id]=S.ticks[id]||{};
+  const wrap=document.createElement("div"); wrap.className="ticks";
+  cfg.items.forEach((t,i)=>{
+    const b=document.createElement("button"); b.className="tick"; b.setAttribute("aria-pressed",!!st[i]);
+    b.innerHTML='<span class="box"></span>'; b.appendChild(document.createTextNode(t));
+    b.addEventListener("click",()=>{
+      st[i]=!st[i]; save(); b.setAttribute("aria-pressed",!!st[i]);
+      const n=cfg.items.filter((_,j)=>st[j]).length;
+      if(n===cfg.items.length) award(key,cfg.xpEach*cfg.items.length,"Every box ticked");
+      markPanel(panel,key,cfg.xpEach*cfg.items.length);
+    });
+    wrap.appendChild(b);
+  });
+  panel.appendChild(wrap); markPanel(panel,key,cfg.xpEach*cfg.items.length);
+});
+
+/* ---------- Self-assessment ---------- */
+const grid=document.getElementById("selfGrid"), selfPanel=document.getElementById("selfPanel");
+SKILLS.forEach((sk,i)=>{
+  const row=document.createElement("div"); row.className="self-row";
+  const l=document.createElement("span"); l.textContent=sk;
+  const seg=document.createElement("div"); seg.className="seg"; seg.setAttribute("role","group"); seg.setAttribute("aria-label",sk);
+  ["Secure","Developing","Not yet"].forEach(o=>{
+    const b=document.createElement("button"); b.textContent=o; b.setAttribute("aria-pressed",S.self[i]===o);
+    b.addEventListener("click",()=>{
+      S.self[i]=o; save(); [...seg.children].forEach(x=>x.setAttribute("aria-pressed",x===b));
+      if(SKILLS.every((_,j)=>S.self[j])) award("self",20,"Skills rated");
+      markPanel(selfPanel,"self",20);
+    });
+    seg.appendChild(b);
+  });
+  row.append(l,seg); grid.appendChild(row);
+});
+markPanel(selfPanel,"self",20);
+
+/* ---------- Bonus: mark this answer ---------- */
+const CRITERIA=["Opens with an analytical point that answers the question","Uses specific, accurate evidence","Explains how the evidence supports the point","Explains why the truce happened in some sectors but not others","Weighs another factor or view and reaches a judgement"];
+const VERD=["Yes","Partly","No"];
+const MTA=[
+ {text:"One important reason the truce happened in some sectors but not others was how close the trenches were. In parts of Flanders the British and German lines were only a short distance apart, so soldiers could hear each other singing on Christmas Eve. Source A shows this, as the rifleman describes the Germans putting up trees and singing, and the British singing back. Because they could hear each other, it was easier for one German soldier to walk across in the morning. In other places the trenches were further apart, so this contact did not happen as easily. This shows that the closeness of the trenches was an important reason for the truce.",
+  top:5, ex:[["Yes","The opening gives a clear reason tied to the question."],["Partly","Source A is used well, but the claim about other sectors has no evidence behind it."],["Yes","It explains how hearing each other made contact easier."],["Partly","Other sectors are mentioned, but only as an assumption."],["No","No other factor is weighed, and the ending repeats the opening."]]},
+ {text:"The attitudes of local officers did more than any other factor to decide where the truce spread, because the initiative came from below but its survival depended on those in command at the front. Where officers joined in or looked away, as in the battalion whose war diary records men going out to meet the Germans and using the pause to bury the dead, fraternisation lasted the whole day. Where officers forbade contact, men stayed in their trenches, and in some sectors fighting and deaths continued on Christmas Day. Proximity mattered too, but close trenches only made contact possible; they did not guarantee it. Officers’ choices turned that possibility into reality, although this explanation fits the British sectors better than the French, where the occupation of home soil made a truce unthinkable whoever was in command.",
+  top:8, ex:[["Yes","The opening makes an arguable claim and gives a reason."],["Yes","It draws on the war diary and on continued fighting elsewhere."],["Yes","It explains how officers turned possibility into reality."],["Yes","It directly explains variation between sectors, including the French contrast."],["Partly","It weighs proximity against officers, though the final judgement could be sharper."]]}
+];
+const cl=document.getElementById("criteriaList"); CRITERIA.forEach(c=>{ const li=document.createElement("li"); li.textContent=c; cl.appendChild(li); });
+const MAIN_MAX=1190, GATE=Math.round(MAIN_MAX*0.7);
+const mainXP=()=>Object.entries(S.xp).reduce((a,[k,v])=>a+((k.startsWith("b:")||k==="w:upgrade"||k==="badge:5")?0:v),0);
+function refreshGate(){
+  const open=S.bonusUnlocked||mainXP()>=GATE;
+  document.getElementById("bonusLocked").hidden=open;
+  document.getElementById("bonusBody").hidden=!open;
+  const x=mainXP();
+  document.getElementById("gateBar").style.width=Math.min(100,x/GATE*100)+"%";
+  document.getElementById("gateText").textContent="Reach "+GATE+" points from the main lesson to unlock the bonus round. You have "+x+".";
+  const nb=route.children[5]; if(nb) nb.querySelector(".n").textContent=open?"★":"6";
+}
+document.getElementById("tutorUnlock").addEventListener("click",()=>{ S.bonusUnlocked=true; save(); refreshGate(); });
+document.querySelectorAll("[data-mta]").forEach(panel=>{
+  const i=+panel.dataset.mta, m=MTA[i], key="b:"+i;
+  const st=S.mta[i]=S.mta[i]||{v:{},mark:null,done:false};
+  const para=document.createElement("div"); para.className="para"; const pp=document.createElement("p"); pp.textContent=m.text; para.appendChild(pp);
+  const tbl=document.createElement("table"); tbl.className="rubric";
+  const markWrap=document.createElement("div");
+  const out=document.createElement("div"); out.className="result";
+  const row=document.createElement("div"); row.className="row";
+  const submit=document.createElement("button"); submit.className="btn solid"; submit.textContent="Submit my marking";
+  row.appendChild(submit);
+  panel.append(para,tbl,markWrap,row,out);
+  function render(){
+    tbl.innerHTML="";
+    CRITERIA.forEach((c,j)=>{
+      const tr=document.createElement("tr"); const a=document.createElement("td"); a.textContent=c;
+      if(st.done){ const mine=st.v[j], exv=m.ex[j][0]; const d=Math.abs(VERD.indexOf(mine)-VERD.indexOf(exv));
+        const e=document.createElement("span"); e.className="ex "+(d===0?"match":d===1?"near":"miss");
+        e.textContent=(d===0?"You agreed with the examiner. ":"Examiner: "+exv+". ")+m.ex[j][1]; a.appendChild(e); }
+      const b=document.createElement("td"); const seg=document.createElement("div"); seg.className="seg"; seg.style.display="inline-flex";
+      VERD.forEach(v=>{ const bt=document.createElement("button"); bt.textContent=v; bt.setAttribute("aria-pressed",st.v[j]===v); bt.disabled=st.done;
+        bt.addEventListener("click",()=>{ st.v[j]=v; save(); render(); }); seg.appendChild(bt); });
+      b.appendChild(seg); tr.append(a,b); tbl.appendChild(tr);
+    });
+    markWrap.innerHTML='<p class="hint" style="margin:.9rem 0 .4rem">Your mark out of 8</p>';
+    const mk=document.createElement("div"); mk.className="marks";
+    for(let n=0;n<=8;n++){ const bt=document.createElement("button"); bt.textContent=n; bt.setAttribute("aria-pressed",st.mark===n); bt.disabled=st.done; bt.setAttribute("aria-label","Mark "+n);
+      bt.addEventListener("click",()=>{ st.mark=n; save(); render(); }); mk.appendChild(bt); }
+    markWrap.appendChild(mk);
+    const ready=CRITERIA.every((_,j)=>st.v[j])&&st.mark!==null;
+    submit.hidden=st.done; submit.disabled=!ready;
+    out.innerHTML="";
+    if(st.done){
+      out.innerHTML='<p style="margin:.2rem 0">Examiner’s mark range: <span class="range">?-'+m.top+'</span></p><p class="hint" style="margin:0">You gave '+st.mark+'. '+(st.mark>m.top?"That is higher than this paragraph can earn. Look again at the criteria the examiner marked Partly or No.":st.mark<m.top-2?"That is harsher than the examiner. Look at what the paragraph does well.":"That is within the range. Compare your verdicts with the examiner’s above.")+'</p>';
+    } else if(!ready){ out.textContent="Judge every criterion and choose a mark to submit."; }
+    markPanel(panel,key,70);
+  }
+  submit.addEventListener("click",()=>{
+    st.done=true; save();
+    let pts=0; CRITERIA.forEach((_,j)=>{ const d=Math.abs(VERD.indexOf(st.v[j])-VERD.indexOf(m.ex[j][0])); pts+=d===0?10:d===1?4:0; });
+    if(st.mark<=m.top&&st.mark>=m.top-2) pts+=20;
+    award(key,pts,"Paragraph "+(i+1)+" marked"); render();
+  });
+  render();
+});
+
+/* ---------- Export: text and PDF ---------- */
+function blocks(){
+  const B=[]; const add=(t,x)=>B.push([t,x]);
+  const T=k=>(S.text[k]||"").trim()||"(blank)";
+  const sortLine=id=>{ const cfg=SORTERS[id], st=S.sort[id]||{place:{}}; return cfg.items.map((it,i)=>"- "+it[0]+": "+(st.place[i]!==undefined?cfg.bins.find(b=>b[0]===st.place[i])[1]:"not placed")).join("\n")+(cfg.open?"":"\nScore: "+(st.score??"not checked")+" / "+cfg.items.length); };
+  const x=totalXP();
+  add("title","Christmas 1914: IB History skills lesson with Leah");
+  add("meta",(S.name?S.name+". ":"")+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}));
+  add("meta","Total: "+x+" XP. Rank: "+RANKS[rankIndex(x)][1]+". Badges: "+(BADGES.filter((_,i)=>S.badges[i]).map(b=>b.name).join(", ")||"none yet")+".");
+  add("h","1. The history of yesterday"); add("label","Account of yesterday"); add("body",T("hook1")); add("label","The historian in 2126"); add("body",T("hook2"));
+  add("h","2. Source detective");
+  add("label","Q1. How did the truce begin and develop? (Source A)"); add("body",T("q1"));
+  add("label","Who wrote it, and why?"); add("body",sortLine("prov"));
+  add("label","Source D: value or limitation?"); add("body",sortLine("opvl"));
+  add("label","Q2. Value and limitations of Source D"); add("body",T("q2"));
+  add("label","Sources B and C: same or different?"); add("body",sortLine("venn"));
+  add("label","Q3. Compare and contrast Sources B and C"); add("body",T("q3"));
+  add("label","Q4 plan"); add("body",sortLine("q4")); add("label","Q4 judgement"); add("body",T("q4w"));
+  let idx=0; const ranks=[]; [1,2,3,2,1].forEach((n,r)=>{ const a=[]; for(let k=0;k<n;k++){ const v=S.slots[idx++]; a.push(v!==null&&v!==undefined?CAUSES[v]:"(empty)"); } ranks.push("Rank "+(r+1)+": "+a.join("; ")); });
+  add("h","3. Why did it happen?"); add("label","Long-term, short-term or trigger"); add("body",sortLine("causes")); add("label","Diamond nine"); add("body",ranks.join("\n")); add("label","Thesis"); add("body",T("thesis"));
+  add("h","4. Writing the argument"); add("label","Analysis or narrative?"); add("body",sortLine("analysis")); add("label","Introduction"); add("body",T("intro")); add("label","Body paragraph"); add("body",T("body"));
+  add("label","Self-check"); add("body",TICKS.essaycheck.items.map((t,i)=>"- "+(S.ticks.essaycheck&&S.ticks.essaycheck[i]?"[x] ":"[ ] ")+t).join("\n"));
+  add("h","5. Why historians disagree"); add("label","Which historian would use it?"); add("body",sortLine("interp")); add("label","Summaries"); add("body",T("i1")); add("label","Why they disagree"); add("body",T("i2"));
+  if(S.mta[0]&&S.mta[0].done||S.mta[1]&&S.mta[1].done||S.text.upgrade){
+    add("h","Bonus round: mark this answer");
+    MTA.forEach((m,i)=>{ const st=S.mta[i]; if(!st||!st.done) return;
+      add("label","Paragraph "+(i+1)+": my mark "+st.mark+" (examiner range ?-"+m.top+")");
+      add("body",CRITERIA.map((c,j)=>"- "+c+": I said "+st.v[j]+", examiner said "+m.ex[j][0]).join("\n")); });
+    add("label","Upgraded paragraph"); add("body",T("upgrade"));
+  }
+  add("h","Debrief"); add("label","Self-assessment"); add("body",SKILLS.map((sk,i)=>"- "+sk+": "+(S.self[i]||"not rated")).join("\n"));
+  add("label","Strength"); add("body",T("strength")); add("label","Target"); add("body",T("target")); add("label","My course"); add("body",T("course"));
+  return B;
+}
+const box=document.getElementById("exportBox");
+function gather(){
+  const out=[]; blocks().forEach(([t,x])=>{ if(t==="h") out.push("","== "+x+" =="); else if(t==="label") out.push("",x+":"); else out.push(x); });
+  box.value=out.join("\n"); return box.value;
+}
+document.getElementById("copyAll").addEventListener("click",async()=>{
+  const text=gather(), msg=document.getElementById("copyMsg");
+  try{ await navigator.clipboard.writeText(text); msg.textContent="Copied. Paste it into your message to Leah."; }
+  catch(e){ box.focus(); box.select(); let ok=false; try{ ok=document.execCommand("copy"); }catch(_){} msg.textContent=ok?"Copied. Paste it into your message to Leah.":"Your work is selected in the box below. Press Ctrl+C or Cmd+C to copy it."; }
+});
+const nameIn=document.getElementById("stuName"); nameIn.value=S.name; nameIn.addEventListener("input",()=>{ S.name=nameIn.value; save(); });
+
+function buildPDF(){
+  const { jsPDF }=window.jspdf; const doc=new jsPDF({unit:"mm",format:"a4"});
+  const M=18, W=210-2*M, H=297; let y=M;
+  const need=h=>{ if(y+h>H-M){ doc.addPage(); y=M; } };
+  const clean=t=>String(t).replace(/[^\x09\x0A\x0D\x20-\x7E\u00A0-\u00FF\u2018\u2019\u201C\u201D\u2013\u2026]/g,"");
+  blocks().forEach(([t,x])=>{
+    x=clean(x);
+    if(t==="title"){ doc.setFont("times","bold"); doc.setFontSize(20); const L=doc.splitTextToSize(x,W); need(L.length*8); doc.text(L,M,y+6); y+=L.length*8+2; }
+    else if(t==="meta"){ doc.setFont("times","normal"); doc.setFontSize(11); doc.setTextColor(86,98,106); const L=doc.splitTextToSize(x,W); need(L.length*5); doc.text(L,M,y+4); y+=L.length*5+1; doc.setTextColor(29,36,39); }
+    else if(t==="h"){ y+=5; need(14); doc.setDrawColor(91,93,49); doc.setLineWidth(0.6); doc.line(M,y,M+W,y); doc.setFont("times","bold"); doc.setFontSize(14); doc.setTextColor(91,93,49); doc.text(x,M,y+7); doc.setTextColor(29,36,39); y+=11; }
+    else if(t==="label"){ doc.setFont("times","bold"); doc.setFontSize(11); const L=doc.splitTextToSize(x,W); need(L.length*5+6); doc.text(L,M,y+4); y+=L.length*5+1; }
+    else { doc.setFont("times","normal"); doc.setFontSize(11); x.split("\n").forEach(par=>{ const L=doc.splitTextToSize(par||" ",W); L.forEach(line=>{ need(5); doc.text(line,M,y+4); y+=5; }); }); y+=3; }
+  });
+  const n=doc.getNumberOfPages(); for(let i=1;i<=n;i++){ doc.setPage(i); doc.setFont("times","normal"); doc.setFontSize(9); doc.setTextColor(120,128,132); doc.text("Christmas 1914: page "+i+" of "+n, M, H-8); }
+  return doc.output("blob");
+}
+const pdfBtn=document.getElementById("pdfBtn");
+let downloads=null;
+if(window.claude&&typeof window.claude.use==="function"){
+  window.claude.use("downloads").then(d=>{ downloads=d; pdfBtn.disabled=!(d&&window.jspdf); if(!d){ pdfBtn.hidden=true; } }).catch(()=>{ pdfBtn.hidden=true; });
+} else { pdfBtn.disabled=!window.jspdf; }
+pdfBtn.addEventListener("click",async()=>{
+  const msg=document.getElementById("copyMsg");
+  if(!window.jspdf){ msg.textContent="PDF download is not available here. Use Copy instead."; return; }
+  try{
+    const blob=buildPDF();
+    const safe=(S.name||"student").replace(/[^A-Za-z0-9 _-]/g,"").trim().replace(/\s+/g,"-")||"student";
+    const fname="Christmas-1914-"+safe+".pdf";
+    if(!downloads){
+      const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fname;
+      document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000);
+      msg.textContent="PDF downloaded."; return;
+    }
+    await downloads.save({filename:fname,data:blob});
+    msg.textContent="PDF saved.";
+  }catch(e){
+    const c=e&&e.code;
+    msg.textContent=c==="declined"?"Download cancelled.":c==="rate_limited"?"A download prompt is already open.":"The PDF could not be saved here. Use Copy instead.";
+  }
+});
+document.getElementById("resetAll").addEventListener("click",()=>{
+  if(!confirm("Clear all answers, XP and badges on this computer?")) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  location.reload();
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ selected=null; renderAllSel(); rankup.classList.remove("show"); } });
+
+/* ---------- Start ---------- */
+renderBadges(); updateHUD(); refreshGate(); go(cur);
+})();
+</script>
+</body>
+</html>
